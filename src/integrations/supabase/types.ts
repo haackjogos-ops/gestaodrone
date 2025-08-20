@@ -14,7 +14,174 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      relatorio_pulverizacao: {
+        Row: {
+          altura_voo: number
+          area_hectares: number
+          created_at: string
+          cultura: string
+          data_voo: string
+          dose_hectare: number
+          id: string
+          observacoes: string | null
+          produto: string
+          temperatura: number | null
+          umidade: number | null
+          updated_at: string
+          user_id: string
+          velocidade: number
+          vento_velocidade: number | null
+          volume_calda: number
+        }
+        Insert: {
+          altura_voo: number
+          area_hectares: number
+          created_at?: string
+          cultura: string
+          data_voo: string
+          dose_hectare: number
+          id?: string
+          observacoes?: string | null
+          produto: string
+          temperatura?: number | null
+          umidade?: number | null
+          updated_at?: string
+          user_id: string
+          velocidade: number
+          vento_velocidade?: number | null
+          volume_calda: number
+        }
+        Update: {
+          altura_voo?: number
+          area_hectares?: number
+          created_at?: string
+          cultura?: string
+          data_voo?: string
+          dose_hectare?: number
+          id?: string
+          observacoes?: string | null
+          produto?: string
+          temperatura?: number | null
+          umidade?: number | null
+          updated_at?: string
+          user_id?: string
+          velocidade?: number
+          vento_velocidade?: number | null
+          volume_calda?: number
+        }
+        Relationships: []
+      }
+      relatorio_solido: {
+        Row: {
+          altura_aplicacao: number
+          area_hectares: number
+          created_at: string
+          cultura: string
+          data_aplicacao: string
+          dose_hectare: number
+          id: string
+          observacoes: string | null
+          produto: string
+          quantidade_kg: number
+          temperatura: number | null
+          umidade: number | null
+          updated_at: string
+          user_id: string
+          velocidade: number
+          vento_velocidade: number | null
+        }
+        Insert: {
+          altura_aplicacao: number
+          area_hectares: number
+          created_at?: string
+          cultura: string
+          data_aplicacao: string
+          dose_hectare: number
+          id?: string
+          observacoes?: string | null
+          produto: string
+          quantidade_kg: number
+          temperatura?: number | null
+          umidade?: number | null
+          updated_at?: string
+          user_id: string
+          velocidade: number
+          vento_velocidade?: number | null
+        }
+        Update: {
+          altura_aplicacao?: number
+          area_hectares?: number
+          created_at?: string
+          cultura?: string
+          data_aplicacao?: string
+          dose_hectare?: number
+          id?: string
+          observacoes?: string | null
+          produto?: string
+          quantidade_kg?: number
+          temperatura?: number | null
+          umidade?: number | null
+          updated_at?: string
+          user_id?: string
+          velocidade?: number
+          vento_velocidade?: number | null
+        }
+        Relationships: []
+      }
+      relatorio_voo_agricola: {
+        Row: {
+          altitude_voo: number
+          area_hectares: number
+          created_at: string
+          cultura: string
+          data_voo: string
+          id: string
+          observacoes: string | null
+          temperatura: number | null
+          tempo_voo: number
+          tipo_operacao: string
+          umidade: number | null
+          updated_at: string
+          user_id: string
+          velocidade: number
+          vento_velocidade: number | null
+        }
+        Insert: {
+          altitude_voo: number
+          area_hectares: number
+          created_at?: string
+          cultura: string
+          data_voo: string
+          id?: string
+          observacoes?: string | null
+          temperatura?: number | null
+          tempo_voo: number
+          tipo_operacao: string
+          umidade?: number | null
+          updated_at?: string
+          user_id: string
+          velocidade: number
+          vento_velocidade?: number | null
+        }
+        Update: {
+          altitude_voo?: number
+          area_hectares?: number
+          created_at?: string
+          cultura?: string
+          data_voo?: string
+          id?: string
+          observacoes?: string | null
+          temperatura?: number | null
+          tempo_voo?: number
+          tipo_operacao?: string
+          umidade?: number | null
+          updated_at?: string
+          user_id?: string
+          velocidade?: number
+          vento_velocidade?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
