@@ -1,10 +1,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plane, Droplets, Package, FileText, Zap, Shield } from "lucide-react";
+import { Plane, Droplets, Package, FileText, Zap, Shield, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
+  const { user, signOut } = useAuth();
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -15,9 +17,23 @@ const Index = () => {
               <Plane className="h-8 w-8 text-primary-foreground" />
               <h1 className="text-2xl font-bold text-primary-foreground">Wincenter Agriculture</h1>
             </div>
-            <Badge variant="secondary" className="bg-agriculture-secondary text-agriculture-earth">
-              HD540s Drone System
-            </Badge>
+            <div className="flex items-center space-x-4">
+              <span className="text-primary-foreground/90 text-sm">
+                {user?.email}
+              </span>
+              <Badge variant="secondary" className="bg-agriculture-secondary text-agriculture-earth">
+                HD540s Drone System
+              </Badge>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={signOut}
+                className="text-primary-foreground hover:bg-primary-foreground/10"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sair
+              </Button>
+            </div>
           </div>
         </div>
       </header>

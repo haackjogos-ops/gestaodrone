@@ -6,11 +6,16 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Droplets, ArrowLeft, Save } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const Pulverizacao = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fazenda: "",
     area: "",
@@ -22,31 +27,62 @@ const Pulverizacao = () => {
     umidade: "",
     vento: "",
     operador: "",
-    observacoes: ""
+    observacoes: "",
+    dataVoo: new Date().toISOString().split('T')[0]
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui você integraria com seu backend
-    toast({
-      title: "Relatório de Pulverização Salvo!",
-      description: "Os dados foram registrados com sucesso no sistema.",
-    });
-    
-    // Reset form
-    setFormData({
-      fazenda: "",
-      area: "",
-      produto: "",
-      concentracao: "",
-      velocidade: "",
-      altitude: "",
-      temperatura: "",
-      umidade: "",
-      vento: "",
-      operador: "",
-      observacoes: ""
-    });
+    setLoading(true);
+
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Você precisa estar logado para salvar o relatório.",
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('relatorio_pulverizacao')
+        .insert({
+          user_id: user.id,
+          data_voo: formData.dataVoo,
+          area_hectares: parseFloat(formData.area),
+          produto: formData.produto,
+          dose_hectare: parseFloat(formData.concentracao),
+          velocidade: parseFloat(formData.velocidade),
+          altura_voo: parseInt(formData.altitude),
+          temperatura: formData.temperatura ? parseFloat(formData.temperatura) : null,
+          umidade: formData.umidade ? parseInt(formData.umidade) : null,
+          vento_velocidade: formData.vento ? parseFloat(formData.vento) : null,
+          observacoes: formData.observacoes || null,
+          volume_calda: 0, // Valor padrão por enquanto
+          cultura: formData.fazenda // Usando fazenda como cultura por enquanto
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Relatório de Pulverização Salvo!",
+        description: "Os dados foram registrados com sucesso no sistema.",
+      });
+      
+      navigate('/');
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao salvar",
+        description: error.message || "Ocorreu um erro ao salvar o relatório.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (field: string, value: string) => {
@@ -86,7 +122,7 @@ const Pulverizacao = () => {
             <CardContent className="p-6">
               <form onSubmit={handleSubmit} className="space-y-8">
                 {/* Informações da Área */}
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-3 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="fazenda">Nome da Fazenda/Propriedade</Label>
                     <Input
@@ -105,6 +141,16 @@ const Pulverizacao = () => {
                       value={formData.area}
                       onChange={(e) => handleChange("area", e.target.value)}
                       placeholder="Ex: 150"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="dataVoo">Data do Voo</Label>
+                    <Input
+                      id="dataVoo"
+                      type="date"
+                      value={formData.dataVoo}
+                      onChange={(e) => handleChange("dataVoo", e.target.value)}
                       required
                     />
                   </div>
@@ -233,9 +279,9 @@ const Pulverizacao = () => {
                   <Button asChild variant="outline">
                     <Link to="/">Cancelar</Link>
                   </Button>
-                  <Button type="submit" className="bg-gradient-primary hover:bg-agriculture-primary/90">
+                  <Button type="submit" disabled={loading} className="bg-gradient-primary hover:bg-agriculture-primary/90">
                     <Save className="mr-2 h-4 w-4" />
-                    Salvar Relatório
+                    {loading ? 'Salvando...' : 'Salvar Relatório'}
                   </Button>
                 </div>
               </form>
