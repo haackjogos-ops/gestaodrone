@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import Pulverizacao from "./pages/Pulverizacao";
 import VooAgricola from "./pages/VooAgricola";
 import Solido from "./pages/Solido";
+import Relatorios from "./pages/Relatorios";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,11 @@ const App = () => (
             <Route path="/solido" element={
               <ProtectedRoute>
                 <Solido />
+              </ProtectedRoute>
+            } />
+            <Route path="/relatorios" element={
+              <ProtectedRoute>
+                <Relatorios />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
